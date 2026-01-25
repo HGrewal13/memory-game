@@ -7,6 +7,7 @@ function Game({pokemonList, gameOver, setGameOver}) {
     const [previouslyChosen, setPreviouslyChosen] = useState([]);
     const [score, setScore] = useState(0);
     const [highScore, setHighScore] = useState(0);
+    const [flipped, setFlipped] = useState(false);
 
     function randomNumberGenerator() {
         return Math.floor(Math.random() * 151) + 1;
@@ -45,6 +46,7 @@ function Game({pokemonList, gameOver, setGameOver}) {
             return;
         }
         console.log("Good");
+        setFlipped(true);
         setPreviouslyChosen(prev => [...prev, id]);
         // score will remain the previous value until the function finishes executing and then re-renders the component.
         // this is why highScore trails by 1.
@@ -54,7 +56,7 @@ function Game({pokemonList, gameOver, setGameOver}) {
             setHighScore(hs => Math.max(hs, newScore));
             return newScore;
         });
-        
+        setTimeout(() => setFlipped(false), 600);
     }
 
     function handleReset() {
@@ -68,19 +70,23 @@ function Game({pokemonList, gameOver, setGameOver}) {
     }
 
     return(
-        <>
+        <div className="game">
             <div className="scoreBoard">
-                <p>Score: </p>
-                <p>{score}</p>
-                <p>Highscore: </p>
-                <p>{highScore}</p>
+                <p>Score: {score}</p>
+                <p>Highscore: {highScore}</p>
             </div>
             <div className="cardDisplay">
                 {randomIds.map(id => {
-                    return <Card key = {id} pokemonList={pokemonList} id = {id} handleClick = {() => handleClick(id)}/>
+                    return <Card 
+                                key = {id} 
+                                pokemonList={pokemonList} 
+                                id = {id} 
+                                handleClick = {() => handleClick(id)}
+                                flipped = {flipped}
+                            />
                 })}
             </div>
-        </>
+        </div>
         
     )
     
