@@ -6,6 +6,7 @@ function Game({pokemonList, gameOver, setGameOver}) {
     const [randomIds, setRandomIds] = useState([]);
     const [previouslyChosen, setPreviouslyChosen] = useState([]);
     const [score, setScore] = useState(0);
+    const [highScore, setHighScore] = useState(0);
 
     function randomNumberGenerator() {
         return Math.floor(Math.random() * 151) + 1;
@@ -45,7 +46,15 @@ function Game({pokemonList, gameOver, setGameOver}) {
         }
         console.log("Good");
         setPreviouslyChosen(prev => [...prev, id]);
-        setScore(score => score + 1);
+        // score will remain the previous value until the function finishes executing and then re-renders the component.
+        // this is why highScore trails by 1.
+        // state variables never change inside the same render.
+        setScore(prev => {
+            const newScore = prev + 1;
+            setHighScore(hs => Math.max(hs, newScore));
+            return newScore;
+        });
+        
     }
 
     function handleReset() {
@@ -63,6 +72,8 @@ function Game({pokemonList, gameOver, setGameOver}) {
             <div className="scoreBoard">
                 <p>Score: </p>
                 <p>{score}</p>
+                <p>Highscore: </p>
+                <p>{highScore}</p>
             </div>
             <div className="cardDisplay">
                 {randomIds.map(id => {
