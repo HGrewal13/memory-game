@@ -8,6 +8,7 @@ function App() {
   
   const url = "https://pokeapi.co/api/v2/pokemon/?limit=151"; //For options on changing generations, url would need to be a dependency in useEffect
   const [pokemonList, setPokemonList] = useState([]);
+  const [gameOver, setGameOver] = useState(false);
 
   // API CALL & STORE INFORMATION INTO POKEMONLIST STATE VARIABLE
   useEffect(() => {
@@ -36,7 +37,7 @@ function App() {
   return (
     <>
       <h1>Memory Game</h1>
-      <Game pokemonList = {pokemonList}/>
+      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver}/>
     </>
   )
 }

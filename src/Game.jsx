@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 
-function Game({pokemonList}) {
+function Game({pokemonList, gameOver, setGameOver}) {
 
     const [randomIds, setRandomIds] = useState([]);
     const [previouslyChosen, setPreviouslyChosen] = useState([]);
@@ -30,13 +30,27 @@ function Game({pokemonList}) {
         }
     }, [pokemonList, score])
 
+    useEffect(() => {
+        if(!gameOver) return;
+
+        handleReset();
+        setGameOver(false);
+    }, [gameOver])
+
     function handleClick(id) {
         if(previouslyChosen.includes(id)) {
             console.log("Game Over");
+            setGameOver(true);
+            return;
         }
         console.log("Good");
         setPreviouslyChosen(prev => [...prev, id]);
         setScore(score => score + 1);
+    }
+
+    function handleReset() {
+        setScore(0);
+        setPreviouslyChosen([]);
     }
 
     // RETURN STATEMENTS 
@@ -45,11 +59,18 @@ function Game({pokemonList}) {
     }
 
     return(
-        <div className="cardDisplay">
-            {randomIds.map(id => {
-                return <Card key = {id} pokemonList={pokemonList} id = {id} handleClick = {() => handleClick(id)}/>
-            })}
-        </div>
+        <>
+            <div className="scoreBoard">
+                <p>Score: </p>
+                <p>{score}</p>
+            </div>
+            <div className="cardDisplay">
+                {randomIds.map(id => {
+                    return <Card key = {id} pokemonList={pokemonList} id = {id} handleClick = {() => handleClick(id)}/>
+                })}
+            </div>
+        </>
+        
     )
     
 }
