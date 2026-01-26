@@ -36,7 +36,7 @@ function App() {
 
   return (
     <>
-      <h1>Memory Game</h1>
+      <h1 className='appHeading'>Memory Game</h1>
       <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver}/>
     </>
   )
