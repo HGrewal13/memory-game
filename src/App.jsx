@@ -21,7 +21,7 @@ function App() {
       })
       .then(data => {
         const results = data.results;
-
+        console.log(results);
         const list = results.map(result => {
           const id = parseInt(result.url.split("/").at(-2));
           const spriteURL = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;

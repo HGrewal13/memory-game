@@ -47,6 +47,7 @@ function Game({pokemonList, gameOver, setGameOver}) {
         }
         console.log("Good");
         setPreviouslyChosen(prev => [...prev, id]);
+        setFlipped(true);
         // score will remain the previous value until the function finishes executing and then re-renders the component.
         // this is why highScore trails by 1.
         // state variables never change inside the same render.
@@ -81,6 +82,7 @@ function Game({pokemonList, gameOver, setGameOver}) {
                                 pokemonList={pokemonList} 
                                 id = {id} 
                                 handleClick = {() => handleClick(id)}
+                                flipped = {flipped}
                             />
                 })}
             </div>
