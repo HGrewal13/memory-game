@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 
-function Game({pokemonList, gameOver, setGameOver}) {
+function Game({pokemonList, gameOver, setGameOver, difficulty}) {
 
     const [randomIds, setRandomIds] = useState([]);
     const [previouslyChosen, setPreviouslyChosen] = useState([]);
@@ -15,7 +15,23 @@ function Game({pokemonList, gameOver, setGameOver}) {
 
     function choosePokemon() {
         const chosen = [];
-        for(let i = 0; i < 8; i++) {
+        let numberOfCards = 0;
+        
+        switch (difficulty) {
+            case "easy":
+                numberOfCards = 4;
+                break;
+            
+            case "medium":
+                numberOfCards = 6;
+                break;
+            
+            case "hard":
+                numberOfCards = 8;
+                break;
+        }
+
+        for(let i = 0; i < numberOfCards; i++) {
             let id = randomNumberGenerator();
             
             while(chosen.includes(id)) {

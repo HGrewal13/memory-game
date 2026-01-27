@@ -8,6 +8,8 @@ function App() {
   
   const url = "https://pokeapi.co/api/v2/pokemon/?limit=151"; //For options on changing generations, url would need to be a dependency in useEffect
   const [pokemonList, setPokemonList] = useState([]);
+  const [difficulty, setDifficulty] = useState("");
+  const [display, setDisplay] = useState("menu");
   const [gameOver, setGameOver] = useState(false);
 
   // API CALL & STORE INFORMATION INTO POKEMONLIST STATE VARIABLE
@@ -34,11 +36,49 @@ function App() {
       })
   }, [])
 
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const difficulty = e.target.difficulty.value;
+    console.log(difficulty);
+    setDifficulty(difficulty);
+    setDisplay("game");
+  }
+
+  // Return statements
+
+  if(display === "menu") {
+    return (
+      <div id="app">
+        <form className='menu' onSubmit={handleSubmit}>
+          <p>Select your difficulty level:</p>
+          <div>
+            <input type="radio" name="difficulty" id="easy" value="easy"/>
+            <label htmlFor="easy">Easy</label>
+          </div>
+          <div>
+            <input type="radio" name="difficulty" id="medium" value="medium"/>
+            <label htmlFor="medium">Medium</label>
+          </div>
+          <div>
+            <input type="radio" name="difficulty" id="hard" value="hard"/>
+            <label htmlFor="hard">Hard</label>
+          </div>
+          <button type="submit">Set</button>
+        </form>
+      </div>
+
+    )
+  }
+
   return (
-    <>
-      <h1 className='appHeading'>Memory Game</h1>
-      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver}/>
-    </>
+    <div id='app'>
+      <header>
+        <h1>Memory Game</h1>
+      </header>
+      
+      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty}/>
+    </div>
   )
 }
 
