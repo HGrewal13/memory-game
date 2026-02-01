@@ -16,6 +16,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+#appMenuDisplay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Menu Styling */
 .menu {
   border: 1px solid black;
@@ -23,10 +29,30 @@
   /* color: red; */
   width: 250px;
   aspect-ratio: 1/0.5;
+  padding: 20px;
 }
 
+.menu input[type="radio"] {
+  cursor: pointer;
+  appearance: none;
+}
+
+.menu label::before {
+  content: "➤";
+  opacity: 0;
+}
+
+label:hover::before {
+  opacity: 1;
+}
+
+/* show cursor on keyboard focus */
+/* input[type="radio"]:focus-visible + label::before {
+  opacity: 1;
+} */
+
 /* App.jsx Styling */
-#app {
+#app, #appMenuDisplay {
   background-image: url(./assets/fieldBackground.jpg);
   background-position: center;
   background-size: cover;

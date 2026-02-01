@@ -36,6 +36,10 @@ function App() {
       })
   }, [])
 
+  function handleChange(e) {
+    if(e.target.name !== "difficulty") return;
+    e.currentTarget.requestSubmit();
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -49,8 +53,8 @@ function App() {
 
   if(display === "menu") {
     return (
-      <div id="app">
-        <form className='menu' onSubmit={handleSubmit}>
+      <div id="appMenuDisplay">
+        <form className='menu' onSubmit={handleSubmit} onChange={handleChange}>
           <p>Select your difficulty level:</p>
           <div>
             <input type="radio" name="difficulty" id="easy" value="easy"/>
@@ -64,7 +68,6 @@ function App() {
             <input type="radio" name="difficulty" id="hard" value="hard"/>
             <label htmlFor="hard">Hard</label>
           </div>
-          <button type="submit">Set</button>
         </form>
       </div>
 
