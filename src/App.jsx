@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Game from './Game';
+import Game2 from './Game2';
 
 function App() {
   
@@ -80,7 +81,8 @@ function App() {
         <h1>Memory Game</h1>
       </header>
       
-      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty}/>
+      {/* <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty}/> */}
+      <Game2 pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty} />
     </div>
   )
 }
