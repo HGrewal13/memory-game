@@ -18,7 +18,7 @@ function Game2({pokemonList, gameOver, setGameOver, difficulty}) {
     }
 
     function randomNumGeneratorControlled(max) {
-        return Math.floor(Math.random() * max) + 1;
+        return Math.floor(Math.random() * max);
     }
 
     // For selecting the pokemon that will be used for the current game.
@@ -43,7 +43,6 @@ function Game2({pokemonList, gameOver, setGameOver, difficulty}) {
                     setCardsPerRound(6);
                     break;
             }
-
             // Randomly pick the appropriate number of pokemon for the game
             for(let i = 0; i < totalCardsInPool; i++) {
                 let id = randomNumberGenerator();
@@ -51,36 +50,31 @@ function Game2({pokemonList, gameOver, setGameOver, difficulty}) {
                 while(chosen.includes(id)) {
                     id = randomNumberGenerator();
                 }
-
                 chosen.push(id);
             }
-
             setGamePokemon(chosen);
         }
-
         chooseGamePokemon();
-    }, [pokemonList]);
+    }, [pokemonList, difficulty, gameOver]);
 
+    // Is the dependency array correct?
+    // It should run this effect when gamePokemon is updated for new games
+    // And score updates for next rounds
     useEffect(() => {
         const chosen = [];
         const pool = gamePokemon;
         const totalCardsInPool = gamePokemon.length;
         
         function chooseRoundPokemon() {
-
             for(let i = 0; i < cardsPerRound; i++) {
                 let id = pool[randomNumGeneratorControlled(totalCardsInPool)];
-
                 while(chosen.includes(id)) {
                     id = pool[randomNumGeneratorControlled(totalCardsInPool)];
                 }
-
                 chosen.push(id);
             }
-
             setRoundPokemon(chosen);
         }
-
         chooseRoundPokemon();
     }, [gamePokemon, score]);
 
@@ -94,7 +88,32 @@ function Game2({pokemonList, gameOver, setGameOver, difficulty}) {
         printIds();
     }, [gamePokemon, roundPokemon]);
 
+    useEffect(() => {
+        function handleGameOver() {
+            if(!gameOver) return;
+            handleReset();
+        }
+        handleGameOver();
+    }, [gameOver]);
 
+    function handleReset() {
+        setScore(0);
+        setPreviouslyChosen([]);
+        setGameOver(false);
+    }
+
+    function handleClick(id) {
+        console.log(id);
+        
+        if(previouslyChosen.includes(id)) {
+            return setGameOver(true);
+        }
+
+        setPreviouslyChosen(prev => {
+            return [...prev, id];
+        })
+        setScore(s => s+1);
+    }
 
 
 
@@ -102,7 +121,7 @@ function Game2({pokemonList, gameOver, setGameOver, difficulty}) {
     return(
         <div className="game">
             <div className="scoreBoard">
-                <p>Score: {score}</p>
+                <p>Score: {score}/{gamePokemon.length}</p>
                 <p>Highscore: {highScore}</p>
                 <p>Difficulty: {difficulty}</p>
             </div>
@@ -113,7 +132,7 @@ function Game2({pokemonList, gameOver, setGameOver, difficulty}) {
                 {/* We are just feeding the card component the IDs. It will search pokemonList and figure out which one to print */}
                 {roundPokemon.map(id => {
                     console.log(id);
-                    return <Card pokemonList={pokemonList} id={id} key={id}/>
+                    return <Card pokemonList={pokemonList} id={id} key={id} handleClick={() => handleClick(id)}/>
                 })}
             </div>
         </div>
