@@ -81,8 +81,7 @@ function App() {
         <h1>Memory Game</h1>
       </header>
       
-      {/* <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty}/> */}
-      <Game2 pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty} />
+      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty} />
     </div>
   )
 }

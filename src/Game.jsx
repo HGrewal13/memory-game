@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 
-function Game2({pokemonList, gameOver, setGameOver, difficulty}) {
+function Game({pokemonList, gameOver, setGameOver, difficulty}) {
     // The pokemon that will be used for this specific instance of the game
     const [gamePokemon, setGamePokemon] = useState([]);
     // Leeps track of how many cards we need per round
@@ -150,4 +150,4 @@ function Game2({pokemonList, gameOver, setGameOver, difficulty}) {
     )
 }
 
-export default Game2;
+export default Game;
