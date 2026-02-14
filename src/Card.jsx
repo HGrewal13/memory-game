@@ -2,9 +2,7 @@ import { useEffect } from "react";
 import cardBack from "./assets/cardBack.png";
 
 function Card({pokemonList, id, handleClick, flipped}) {
-
     const pokemon = pokemonList.find(p => p.id == id);
-
     return(
         <>
             <div className={`card ${flipped ? "flipped" : ""}`} onClick={handleClick}>

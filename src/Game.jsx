@@ -1,68 +1,112 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 
-function Game({pokemonList, gameOver, setGameOver, difficulty}) {
-
-    const [randomIds, setRandomIds] = useState([]);
+function Game2({pokemonList, gameOver, setGameOver, difficulty}) {
+    // The pokemon that will be used for this specific instance of the game
+    const [gamePokemon, setGamePokemon] = useState([]);
+    // Leeps track of how many cards we need per round
+    const [cardsPerRound, setCardsPerRound] = useState(0);
+    // The pokemon that will be shown for the round. Derived from gamePokemon
+    const [roundPokemon, setRoundPokemon] = useState([]);
+    // The previous pokemon that the user has clicked
     const [previouslyChosen, setPreviouslyChosen] = useState([]);
     const [score, setScore] = useState(0);
     const [highScore, setHighScore] = useState(0);
+
     const [flipped, setFlipped] = useState(false);
 
     function randomNumberGenerator() {
         return Math.floor(Math.random() * 151) + 1;
     }
 
-    function choosePokemon() {
-        const chosen = [];
-        let numberOfCards = 0;
-        
-        switch (difficulty) {
-            case "easy":
-                numberOfCards = 4;
-                break;
-            
-            case "medium":
-                numberOfCards = 6;
-                break;
-            
-            case "hard":
-                numberOfCards = 8;
-                break;
-        }
-
-        for(let i = 0; i < numberOfCards; i++) {
-            let id = randomNumberGenerator();
-            
-            while(chosen.includes(id)) {
-                id = randomNumberGenerator();
-            }
-            chosen.push(id);
-        }
-        setRandomIds(chosen);
+    function randomNumGeneratorControlled(max) {
+        return Math.floor(Math.random() * max);
     }
 
+    // For selecting the pokemon that will be used for the current game.
     useEffect(() => {
-        if(pokemonList.length > 0) {
-            choosePokemon();
+        function chooseGamePokemon() {
+            const chosen = [];
+            let totalCardsInPool = 0;
+
+            switch(difficulty) {
+                case "easy":
+                    totalCardsInPool = 5;
+                    setCardsPerRound(3);
+                    break;
+
+                case "medium":
+                    totalCardsInPool = 10;
+                    setCardsPerRound(4);
+                    break;
+                
+                case "hard":
+                    totalCardsInPool = 20;
+                    setCardsPerRound(6);
+                    break;
+            }
+            // Randomly pick the appropriate number of pokemon for the game
+            for(let i = 0; i < totalCardsInPool; i++) {
+                let id = randomNumberGenerator();
+
+                while(chosen.includes(id)) {
+                    id = randomNumberGenerator();
+                }
+                chosen.push(id);
+            }
+            setGamePokemon(chosen);
         }
-    }, [pokemonList, score])
+        chooseGamePokemon();
+    }, [pokemonList, difficulty, gameOver]);
+
+    // Is the dependency array correct?
+    // It should run this effect when gamePokemon is updated for new games
+    // And score updates for next rounds
+    useEffect(() => {
+        const chosen = [];
+        const pool = gamePokemon;
+        const totalCardsInPool = gamePokemon.length;
+        
+        function chooseRoundPokemon() {
+            for(let i = 0; i < cardsPerRound; i++) {
+                let id = pool[randomNumGeneratorControlled(totalCardsInPool)];
+                while(chosen.includes(id)) {
+                    id = pool[randomNumGeneratorControlled(totalCardsInPool)];
+                }
+                chosen.push(id);
+            }
+            setRoundPokemon(chosen);
+        }
+        chooseRoundPokemon();
+    }, [gamePokemon, score]);
+
+    // For development phase. Delete after
+    useEffect(() => {
+        function printIds() {
+            console.log("Game Pokemon: " + gamePokemon);
+            console.log("Round Pokemon" + roundPokemon);
+        }
+
+        printIds();
+    }, [gamePokemon, roundPokemon]);
 
     useEffect(() => {
-        if(!gameOver) return;
-
-        handleReset();
-        setGameOver(false);
-    }, [gameOver])
+        function handleGameOver() {
+            if(!gameOver) return;
+            handleReset();
+        }
+        handleGameOver();
+    }, [gameOver]);
 
     function handleClick(id) {
+        console.log(id);
         if(previouslyChosen.includes(id)) {
-            console.log("Game Over");
-            setGameOver(true);
-            return;
+            return setGameOver(true);
         }
-        console.log("Good");
-        setPreviouslyChosen(prev => [...prev, id]);
+
+        setPreviouslyChosen(prev => {
+            return [...prev, id];
+        })
         setFlipped(true);
         // score will remain the previous value until the function finishes executing and then re-renders the component.
         // this is why highScore trails by 1.
@@ -78,9 +122,10 @@ function Game({pokemonList, gameOver, setGameOver, difficulty}) {
     function handleReset() {
         setScore(0);
         setPreviouslyChosen([]);
+        setGameOver(false);
     }
 
-    // RETURN STATEMENTS 
+    // RENDERING
     if(pokemonList.length === 0) {
         return(<h1>Loading...</h1>)
     }
@@ -88,24 +133,21 @@ function Game({pokemonList, gameOver, setGameOver, difficulty}) {
     return(
         <div className="game">
             <div className="scoreBoard">
-                <p>Score: {score}</p>
+                <p>Score: {score}/{gamePokemon.length}</p>
                 <p>Highscore: {highScore}</p>
+                <p>Difficulty: {difficulty}</p>
             </div>
+
             <div className="cardDisplay">
-                {randomIds.map(id => {
-                    return <Card 
-                                key = {id} 
-                                pokemonList={pokemonList} 
-                                id = {id} 
-                                handleClick = {() => handleClick(id)}
-                                flipped = {flipped}
-                            />
+                {/* We are just feeding the card component the IDs. It will search pokemonList and figure out which one to print */}
+                {roundPokemon.map(id => {
+                    console.log(id);
+                    return <Card pokemonList={pokemonList} id={id} key={id} handleClick={() => handleClick(id)} flipped = {flipped}/>
                 })}
             </div>
         </div>
-        
+
     )
-    
 }
 
-export default Game;
+export default Game2;
