@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 
-function Game({pokemonList, gameOver, setGameOver, difficulty}) {
+function Game({pokemonList, gameOver, setGameOver, difficulty, setDisplay}) {
     // The pokemon that will be used for this specific instance of the game
     const [gamePokemon, setGamePokemon] = useState([]);
     // Leeps track of how many cards we need per round
@@ -12,6 +12,8 @@ function Game({pokemonList, gameOver, setGameOver, difficulty}) {
     const [previouslyChosen, setPreviouslyChosen] = useState([]);
     const [score, setScore] = useState(0);
     const [highScore, setHighScore] = useState(0);
+
+    const [winStatus, setWinStatus] = useState("");
 
     const [flipped, setFlipped] = useState(false);
 
@@ -90,10 +92,13 @@ function Game({pokemonList, gameOver, setGameOver, difficulty}) {
         printIds();
     }, [gamePokemon, roundPokemon]);
 
+    // --------------------------------- Something wrong with the logic below --------------------------------------------------------
+
     useEffect(() => {
         function handleGameOver() {
             if(!gameOver) return;
-            handleReset();
+            // the reset should come when we click on the play again screen.
+            // handleReset();
         }
         handleGameOver();
     }, [gameOver]);
@@ -101,7 +106,9 @@ function Game({pokemonList, gameOver, setGameOver, difficulty}) {
     function handleClick(id) {
         console.log(id);
         if(previouslyChosen.includes(id)) {
+            setWinStatus("lose");
             return setGameOver(true);
+            // We want to perform a check when gameOver is true. the win or loss status determines the screen
         }
 
         setPreviouslyChosen(prev => {
@@ -119,16 +126,46 @@ function Game({pokemonList, gameOver, setGameOver, difficulty}) {
         setTimeout(() => setFlipped(false), 600);
     }
 
+    // This immediately shows the win screen because when component mounts, gamePokemon is empty and score = 0
+    // fixed with adding gamePokemon.length > 0 check
+    useEffect(() => {
+        function checkWin() {
+            if(gamePokemon.length > 0 && score === gamePokemon.length) {
+                setWinStatus("win");
+                return setGameOver(true);
+            }
+        }
+        checkWin();
+    }, [score]);
+
+    useEffect(() => {
+        function handleWinStatus() {
+            if(winStatus !== "win" && winStatus !== "lose") return;
+            else if(winStatus === "win") {
+                setDisplay("win");
+            } else if(winStatus === "lose") {
+                setDisplay("lose");
+            }
+        }
+
+        handleWinStatus();
+    }, [gameOver]);
+
     function handleReset() {
         setScore(0);
         setPreviouslyChosen([]);
         setGameOver(false);
     }
 
+    // ----------------------------------------------------------------------------------------------------------------------------------------
+
+
     // RENDERING
     if(pokemonList.length === 0) {
         return(<h1>Loading...</h1>)
     }
+
+    
 
     return(
         <div className="game">

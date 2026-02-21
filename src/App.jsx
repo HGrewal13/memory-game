@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Game from './Game';
 
@@ -70,7 +68,20 @@ function App() {
           </div>
         </form>
       </div>
-
+    )
+  } else if(display === "win") {
+    return (
+      <div id="app">
+        <h2>Congrats! You Win!</h2>
+        <button>Play Again</button>
+      </div>
+    )
+  } else if(display === "lose") {
+    return (
+      <div id="app">
+        <h2>Sorry! You Lose!</h2>
+        <button>Play Again</button>
+      </div>
     )
   }
 
@@ -80,7 +91,7 @@ function App() {
         <h1>Memory Game</h1>
       </header>
       
-      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty} />
+      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty} setDisplay = {setDisplay}/>
     </div>
   )
 }
