@@ -51,6 +51,8 @@ function App() {
     return setDisplay(result);
   }
 
+  // Create function that uses a callback for play again
+
   // Return statements
 
   if(display === "menu") {
@@ -73,21 +75,7 @@ function App() {
         </form>
       </div>
     )
-  } else if(display === "win") {
-    return (
-      <div id="app">
-        <h2>Congrats! You Win!</h2>
-        <button>Play Again</button>
-      </div>
-    )
-  } else if(display === "lose") {
-    return (
-      <div id="app">
-        <h2>Sorry! You Lose!</h2>
-        <button>Play Again</button>
-      </div>
-    )
-  }
+  } 
 
   return (
     <div id='app'>

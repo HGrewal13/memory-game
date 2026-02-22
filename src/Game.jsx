@@ -150,6 +150,7 @@ function Game({pokemonList, gameOver, setGameOver, difficulty, handleDisplayChan
     function handleReset() {
         setScore(0);
         setPreviouslyChosen([]);
+        setWinStatus("");
         setGameOver(false);
     }
 
@@ -161,7 +162,14 @@ function Game({pokemonList, gameOver, setGameOver, difficulty, handleDisplayChan
         return(<h1>Loading...</h1>)
     }
 
-    
+    if(pokemonList.length > 0 && gameOver) {
+        return (
+            <div className="overlay">
+                <p>You {winStatus}!</p>
+                <button onClick={handleReset}>Play Again</button>
+            </div>
+        )
+    }
 
     return(
         <div className="game">
