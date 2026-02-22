@@ -47,6 +47,10 @@ function App() {
     setDisplay("game");
   }
 
+  function handleDisplayChange(result) {
+    return setDisplay(result);
+  }
+
   // Return statements
 
   if(display === "menu") {
@@ -91,7 +95,7 @@ function App() {
         <h1>Memory Game</h1>
       </header>
       
-      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty} setDisplay = {setDisplay}/>
+      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty} handleDisplayChange = {handleDisplayChange}/>
     </div>
   )
 }

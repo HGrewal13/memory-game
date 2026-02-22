@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 
-function Game({pokemonList, gameOver, setGameOver, difficulty, setDisplay}) {
+function Game({pokemonList, gameOver, setGameOver, difficulty, handleDisplayChange}) {
     // The pokemon that will be used for this specific instance of the game
     const [gamePokemon, setGamePokemon] = useState([]);
     // Leeps track of how many cards we need per round
@@ -141,11 +141,7 @@ function Game({pokemonList, gameOver, setGameOver, difficulty, setDisplay}) {
     useEffect(() => {
         function handleWinStatus() {
             if(winStatus !== "win" && winStatus !== "lose") return;
-            else if(winStatus === "win") {
-                setDisplay("win");
-            } else if(winStatus === "lose") {
-                setDisplay("lose");
-            }
+            handleDisplayChange(winStatus);
         }
 
         handleWinStatus();
