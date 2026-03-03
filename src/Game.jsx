@@ -9,7 +9,7 @@ function Game({pokemonList, difficulty}) {
     // The pokemon that will be shown for the round. Derived from gamePokemon
     const [roundPokemon, setRoundPokemon] = useState([]);
     // The previous pokemon that the user has clicked
-    const [previouslyChosen, setPreviouslyChosen] = useState([]);
+    const [previouslyChosen, setPreviouslyChosen] = useState(new Set());
     const [score, setScore] = useState(0);
     const [highScore, setHighScore] = useState(0);
 
@@ -102,18 +102,21 @@ function Game({pokemonList, difficulty}) {
         checkWin();
     }, [score]);
 
-    // --------------------------------- Something wrong with the logic below --------------------------------------------------------
+    // --------------------------------- handle functions --------------------------------------------------------
 
     function handleClick(id) {
         console.log(id);
-        if(previouslyChosen.includes(id)) {
+
+        if(previouslyChosen.has(id)) {
             setWinStatus("lose");
             return setGameOver(true);
-        }
+        };
 
         setPreviouslyChosen(prev => {
-            return [...prev, id];
-        })
+            const newSet = new Set(prev);
+            newSet.add(id);
+            return newSet;
+        });
         setFlipped(true);
         // score will remain the previous value until the function finishes executing and then re-renders the component.
         // this is why highScore trails by 1.
@@ -128,7 +131,7 @@ function Game({pokemonList, difficulty}) {
 
     function handleReset() {
         setScore(0);
-        setPreviouslyChosen([]);
+        setPreviouslyChosen(new Set());
         setWinStatus("");
         setGameOver(false);
     }
