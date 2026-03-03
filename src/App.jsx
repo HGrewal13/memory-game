@@ -5,7 +5,8 @@ import Game from './Game';
 function App() {
   
   const url = "https://pokeapi.co/api/v2/pokemon/?limit=151"; //For options on changing generations, url would need to be a dependency in useEffect
-  const [pokemonList, setPokemonList] = useState([]);
+  // const [pokemonList, setPokemonList] = useState([]);
+  const [pokemonList, setPokemonList] = useState({});
   const [difficulty, setDifficulty] = useState("");
   const [display, setDisplay] = useState("menu");
 
@@ -21,16 +22,20 @@ function App() {
       .then(data => {
         const results = data.results;
         console.log(results);
-        const list = results.map(result => {
+        
+        const pokemonMap = {};
+        results.forEach(result => {
           const id = parseInt(result.url.split("/").at(-2));
-          const spriteURL = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-          return {name: result.name, id: id, sprite: spriteURL}
-        })
-        setPokemonList(list);
+          pokemonMap[id] = {
+            name: result.name,
+            spriteURL: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
+          };
+        });
+        setPokemonList(pokemonMap);
       })
       .catch(error => {
         console.error("There was a problem with the fetch operation: ", error);
-      })
+      });
   }, [])
 
   function handleChange(e) {

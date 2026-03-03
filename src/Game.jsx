@@ -137,11 +137,11 @@ function Game({pokemonList, difficulty}) {
 
 
     // RENDERING
-    if(pokemonList.length === 0) {
-        return(<h1>Loading...</h1>)
+    if(Object.keys(pokemonList).length === 0) {
+        return(<h1>Loading...</h1>);
     }
 
-    if(pokemonList.length > 0 && gameOver) {
+    if(Object.keys(pokemonList).length > 0 && gameOver) {
         return (
             <div className="overlay">
                 <p>You {winStatus}!</p>
