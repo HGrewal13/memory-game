@@ -8,7 +8,6 @@ function App() {
   const [pokemonList, setPokemonList] = useState([]);
   const [difficulty, setDifficulty] = useState("");
   const [display, setDisplay] = useState("menu");
-  const [gameOver, setGameOver] = useState(false);
 
   // API CALL & STORE INFORMATION INTO POKEMONLIST STATE VARIABLE
   useEffect(() => {
@@ -47,12 +46,6 @@ function App() {
     setDisplay("game");
   }
 
-  function handleDisplayChange(result) {
-    return setDisplay(result);
-  }
-
-  // Create function that uses a callback for play again
-
   // Return statements
 
   if(display === "menu") {
@@ -83,7 +76,7 @@ function App() {
         <h1>Memory Game</h1>
       </header>
       
-      <Game pokemonList = {pokemonList} gameOver = {gameOver} setGameOver = {setGameOver} difficulty = {difficulty} handleDisplayChange = {handleDisplayChange}/>
+      <Game pokemonList = {pokemonList} difficulty = {difficulty}/>
     </div>
   )
 }
